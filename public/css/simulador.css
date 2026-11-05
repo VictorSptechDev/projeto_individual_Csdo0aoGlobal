@@ -1,0 +1,13 @@
+/* ===========================
+   PÁGINA DO SIMULADOR
+   =========================== */
+
+.simulador {
+  color: white;
+}
+
+.simulador .container {
+  flex-direction: column;
+  overflow: scroll;
+  height: var(--tamanho-simulador);
+}
