@@ -3,8 +3,28 @@
    (dashboard.html, cards.html, mural.html, edicao-aviso.html)
    =========================== */
 
-/* 
-   Nota: Este arquivo substitui o antigo "dashboards.css" que era 
-   referenciado nos HTMLs do dashboard mas não existia.
-   Adicione aqui os estilos específicos das páginas do dashboard.
-*/
+.header-left h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+}
+
+.header-left .img-logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.prata,
+.cor-prata {
+  color: #b8b8b8;
+  font-weight: 700;
+}
+
+.global,
+.cor-global {
+  color: #f5b300;
+  font-weight: 700;
+}

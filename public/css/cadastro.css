@@ -1,13 +1,13 @@
 /* ===========================
    PÁGINA DE CADASTRO
-   Reutiliza a classe .login do componentes
-   Estilos específicos do cadastro ficam aqui
    =========================== */
 
 .login {
   height: var(--tamanho-login);
-  background-image: url('../assets/imgs/bg-jelly-fish-para-home.png');
+  background-image: url('https://images8.alphacoders.com/132/1329760.jpeg');
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .login .container {

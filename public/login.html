@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt_br">
 
 <head>
     <meta charset="UTF-8">
@@ -23,7 +23,7 @@
 
     <div class="header">
         <div class="container">
-            <h1 class="titulo">doPrataAoGlobal</h1>
+            <h1 class="titulo">do<span class="prata">Prata</span>Ao<span class="global">Global</span> <img src="https://goranked.gg/storage/uploads/articles/QCsNg44NMkC9Ze1xtGjzuDOpglaIqNrA0tvr4oqI.png" alt="Logo CS2" class="img-logo"></h1>
             <ul class="navbar">
                 <li>
                     <a href="index.html">Inicial</a>
@@ -51,7 +51,7 @@
         </div>
         <div class="container">
             <div class="card card-login">
-                <h2>Olá de volta!</h2>
+                <h2>Bem Vindo Novamente!!!</h2>
                 <div class="formulario">
                     <div class="campo">
                         <span>E-mail:</span>
@@ -74,9 +74,10 @@
     </div>
 
     <!--footer inicio-->
-    <div class="footer">
-        <div class="container">
-            <p>© 2026 doPrataAoGlobal.</p>
+    
+       
+            <div>
+          <p>do prata ao global</p>
         </div>
     </div>
     <!--footer fim-->
@@ -125,13 +126,13 @@
                 resposta.json().then(json => {
                     console.log(json);
                     console.log(JSON.stringify(json));
-                    sessionStorage.EMAIL_USUARIO = json.email;
-                    sessionStorage.NOME_USUARIO = json.nome;
                     sessionStorage.ID_USUARIO = json.id;
-                    sessionStorage.AQUARIOS = JSON.stringify(json.aquarios)
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.TIPO_USUARIO = json.tipoUsuario;
 
                     setTimeout(function () {
-                        window.location = "./dashboard/cards.html";
+                        window.location = "./index.html";
                     }, 1000); // apenas para exibir o loading
 
                 });

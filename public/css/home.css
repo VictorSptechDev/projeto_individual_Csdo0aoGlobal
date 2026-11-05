@@ -20,12 +20,28 @@ body {
 }
 
 .header-home .titulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
   width: 100%;
   color: #fff;
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 800;
   line-height: 1.1;
   text-align: center;
+}
+
+.header-home .img-logo {
+  height: clamp(38px, 6vw, 65px);
+}
+
+.header-home .titulo .prata {
+  color: #b8b8b8;
+}
+
+.header-home .titulo .global {
+  color: #f5b300;
 }
 
 .banner {
