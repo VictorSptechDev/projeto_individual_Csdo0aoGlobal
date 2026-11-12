@@ -82,6 +82,9 @@ input {
 
 /* BOTÕES */
 
+
+/* Botão para login */ 
+
 .botao {
   cursor: pointer;
   font-family: "Barlow", sans-serif;
@@ -90,13 +93,14 @@ input {
   font-weight: 600;
   font-size: 18px;
   color: #fff;
-  background-color: #ED145B;
+  background-color: #3b3b3b;
   width: 120px;
   height: 30px;
   align-self: center;
   margin-top: 20px;
 }
 
+/* Botão para Cadastro */ 
 .btn {
   font-family: "Barlow", sans-serif;
   border: 0;
@@ -105,7 +109,7 @@ input {
   font-size: 18px;
   padding: 10px 15px;
   color: white;
-  background-color: #ED145B;
+  background-color: ;
   width: 120px;
   align-self: center;
   margin-top: 5px;

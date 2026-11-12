@@ -58,10 +58,10 @@ body {
 }
 
 .navbar {
-  width: 300px;
+  width: auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
   list-style: none;
   color: #e3b062;
 }

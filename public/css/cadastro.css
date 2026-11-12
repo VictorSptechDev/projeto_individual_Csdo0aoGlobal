@@ -4,7 +4,7 @@
 
 .login {
   height: var(--tamanho-login);
-  background-image: url('https://images8.alphacoders.com/132/1329760.jpeg');
+  background-image: url('../assets/imagens/bg-ct-wallpaper.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -14,4 +14,31 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+/* Glassmorphism — card transparente sobre o fundo */
+.login .card-cadastro {
+  background: rgba(10, 15, 25, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  color: #f0f0f0;
+}
+
+.login .card-cadastro h2 {
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  margin-bottom: 24px;
+}
+
+.login .card-cadastro .formulario span {
+  color: #d0d0d0;
+}
+
+.login .card-cadastro .formulario input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(50, 185, 205, 0.6);
+  color: #ffffff;
+  border-radius: 10px;
 }

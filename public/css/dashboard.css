@@ -3,11 +3,47 @@
    (dashboard.html, cards.html, mural.html, edicao-aviso.html)
    =========================== */
 
+/* ---- Layout geral ---- */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0d0d0f;
+  color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  font-family: 'Exo 2', 'Barlow', 'Segoe UI', sans-serif;
+}
+
+.janela {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---- Sidebar esquerda ---- */
+
+.header-left {
+  width: 220px;
+  min-height: 100vh;
+  background-color: #161618;
+  border-right: 1px solid #2a2a2e;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px 16px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
 .header-left h1 {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: #ffffff;
+  font-size: 1.3rem;
+  margin: 0 0 12px 0;
 }
 
 .header-left .img-logo {
@@ -17,14 +53,408 @@
   border-radius: 4px;
 }
 
-.prata,
-.cor-prata {
-  color: #b8b8b8;
-  font-weight: 700;
+/* ---- Saudação ---- */
+
+.hello {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: #1e1e22;
+  border-radius: 8px;
+  margin-bottom: 8px;
 }
 
-.global,
-.cor-global {
-  color: #f5b300;
-  font-weight: 700;
+.hello h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #aaaaaa;
+  font-weight: 400;
 }
+
+/* ---- Botões de navegação ---- */
+
+.btn-nav,
+.btn-nav-white {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-nav {
+  background-color: #ED145B;
+}
+
+.btn-nav h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.btn-nav-white {
+  background-color: #1e1e22;
+}
+
+.btn-nav-white:hover {
+  background-color: #2a2a30;
+}
+
+.btn-nav-white a {
+  text-decoration: none;
+  color: #cccccc;
+}
+
+.btn-nav-white h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.btn-logout {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #2a0a14;
+  margin-top: auto;
+  transition: background 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #3d1020;
+}
+
+.btn-logout h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #ED145B;
+  font-weight: 600;
+}
+
+/* ---- Área principal ---- */
+
+.dash,
+.dash-right {
+  flex: 1;
+  padding: 32px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+/* ---- Botões de seleção de aquário/simulação ---- */
+
+.btns-dash {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-chart {
+  padding: 8px 18px;
+  border: 2px solid #ED145B;
+  border-radius: 6px;
+  background: transparent;
+  color: #ED145B;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-chart:hover,
+.btn-pink {
+  background-color: #ED145B !important;
+  color: #fff !important;
+}
+
+.btn-white {
+  background: transparent !important;
+  color: #ED145B !important;
+}
+
+/* ---- Gráfico ---- */
+
+#graficos {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.tituloGraficos {
+  color: #cccccc;
+  font-size: 1.1rem;
+  margin: 0 0 12px 0;
+}
+
+.graph {
+  background-color: #1a1a1e;
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid #2a2a2e;
+}
+
+.display-none {
+  display: none !important;
+}
+
+.display-block {
+  display: block !important;
+}
+
+.label-captura {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #aaaaaa;
+}
+
+/* ---- Cards de aquários ---- */
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.card-aquario {
+  background-color: #1a1a1e;
+  border: 1px solid #2a2a2e;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.title-aquario {
+  background-color: #22222a;
+  padding: 12px 16px;
+}
+
+.title-aquario h1 {
+  margin: 0;
+  font-size: 1rem;
+  color: #f0f0f0;
+}
+
+.desc-aquario {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.temperatura p {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #32b9cd;
+}
+
+.cor-alerta {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #3a3a3a;
+}
+
+/* ---- Legenda parâmetros ---- */
+
+.area-parametros-alerta {
+  background-color: #1a1a1e;
+  border: 1px solid #2a2a2e;
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+
+.titulo-legenda {
+  margin: 0 0 12px 0;
+  font-size: 0.85rem;
+  color: #aaaaaa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.parametros-alerta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.item-regua {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+.perigo-frio   { background-color: #1a3fa8; }
+.alerta-frio   { background-color: #4870d4; }
+.ideal         { background-color: #1a7a3a; }
+.alerta-quente { background-color: #c97a00; }
+.perigo-quente { background-color: #c0392b; }
+
+/* ---- Avisos / Mural ---- */
+
+.avisos {
+  width: 100%;
+}
+
+.avisos h1 {
+  color: #f0f0f0;
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+}
+
+.div-form {
+  background-color: #1a1a1e;
+  border: 1px solid #2a2a2e;
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.div-form label {
+  font-size: 0.9rem;
+  color: #aaaaaa;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.div-form input,
+.div-form textarea {
+  background-color: #0d0d0f;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  color: #f0f0f0;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  width: 100%;
+  resize: vertical;
+}
+
+.div-form input:focus,
+.div-form textarea:focus {
+  outline: none;
+  border-color: #ED145B;
+}
+
+.div-form button,
+.avisos button {
+  align-self: flex-start;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ED145B;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 4px;
+}
+
+.div-form button:hover {
+  background-color: #c01049;
+}
+
+.div-results {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.feed-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.publicacao {
+  background-color: #1a1a1e;
+  border: 1px solid #2a2a2e;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.publicacao-titulo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  display: block;
+}
+
+.publicacao-nome {
+  font-size: 0.85rem;
+  color: #888888;
+  display: block;
+}
+
+.publicacao-descricao {
+  font-size: 0.95rem;
+  color: #cccccc;
+  margin-top: 6px;
+}
+
+.div-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.publicacao-btn-editar {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  background-color: #2a2a2e;
+  color: #cccccc;
+}
+
+.publicacao-btn-editar:hover {
+  background-color: #ED145B;
+  color: #fff;
+}
+
+/* ---- Responsividade ---- */
+
+@media (max-width: 700px) {
+  .header-left {
+    width: 100%;
+    min-height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .janela {
+    flex-direction: column;
+  }
+
+  .btn-logout {
+    margin-top: 0;
+  }
+}
+
+/* ---- Cores especiais do título ---- */
+
+.header-left h1 .prata { color: #b8b8b8; font-weight: 700; }
+.header-left h1 .global { color: #f5b300; font-weight: 700; }

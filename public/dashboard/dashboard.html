@@ -6,9 +6,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AquaTech | Dashboards</title>
+    <title>doPrataAoGlobal | Performance & Mapas CS2</title>
 
-    
     <link rel="stylesheet" href="./../css/dashboard.css">
     <link rel="stylesheet" href="./../css/global.css" />
     <link rel="stylesheet" href="./../css/componentes.css" />
@@ -16,22 +15,638 @@
     <script src="./../js/alerta.js"></script>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Rajdhani:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- scripts do Chart.js - 2022-1 -->
+    <!-- Chart.js para o Gráfico de Radar -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!--FONT AWESOME-->
+    <!-- FONT AWESOME -->
     <script src="https://kit.fontawesome.com/9f7414eb10.js" crossorigin="anonymous"></script>
-</head>
 
-<!-- <body onload=" atualizarFeed()"> -->
+    <style>
+        /* ==============================================================
+           ESTILOS CS2 TRACKER / PERFORMANCE & RADAR POR MAPA
+           ============================================================== */
+        :root {
+            --cs-bg: #0E1217;
+            --cs-card-bg: #151A21;
+            --cs-card-hover: #1C232D;
+            --cs-border: rgba(255, 255, 255, 0.08);
+            --cs-verde: #00D285;
+            --cs-vermelho: #F43F5E;
+            --cs-amarelo: #F2B632;
+            --cs-azul: #368BFF;
+            --cs-texto-muted: #8E9BAE;
+        }
+
+        .dash-leetify {
+            background-color: var(--cs-bg);
+            color: #FFFFFF;
+            padding: 24px 32px 48px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* ----- Barra de Perfil Superior ----- */
+        .perfil-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--cs-card-bg);
+            border: 1px solid var(--cs-border);
+            border-radius: 14px;
+            padding: 16px 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .perfil-info-lado {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .perfil-avatar-wrap {
+            position: relative;
+            width: 56px;
+            height: 56px;
+        }
+
+        .perfil-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--cs-verde);
+            background: #202936;
+        }
+
+        .perfil-level-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #E11D48;
+            color: #FFF;
+            font-size: 0.7rem;
+            font-weight: 800;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--cs-card-bg);
+        }
+
+        .perfil-dados h2 {
+            margin: 0 0 4px 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .perfil-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--cs-texto-muted);
+        }
+
+        .status-online {
+            color: var(--cs-verde);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--cs-verde);
+            box-shadow: 0 0 8px var(--cs-verde);
+        }
+
+        /* Abas superiores */
+        .perfil-tabs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--cs-border);
+            padding-bottom: 2px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--cs-texto-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 10px 18px;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .tab-btn:hover {
+            color: #FFF;
+        }
+
+        .tab-btn.tab-active {
+            color: var(--cs-verde);
+            border-bottom: 2px solid var(--cs-verde);
+            background: rgba(0, 210, 133, 0.05);
+        }
+
+        /* Sub-abas (Maps / Weapons) */
+        .sub-tabs {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sub-tab-btn {
+            background: var(--cs-card-bg);
+            border: 1px solid var(--cs-border);
+            color: var(--cs-texto-muted);
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .sub-tab-btn.sub-active {
+            background: rgba(0, 210, 133, 0.12);
+            color: var(--cs-verde);
+            border-color: rgba(0, 210, 133, 0.35);
+        }
+
+        /* ----- 4 Cards Resumo do Topo ----- */
+        .resumo-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .card-stat {
+            background: var(--cs-card-bg);
+            border: 1px solid var(--cs-border);
+            border-radius: 12px;
+            padding: 20px 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .card-stat:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+
+        .card-stat-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--cs-texto-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .card-stat-valor {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 8px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .card-stat-sub {
+            font-size: 0.85rem;
+            color: var(--cs-texto-muted);
+            margin: 0;
+        }
+
+        .val-amarelo { color: var(--cs-amarelo); }
+        .val-verde { color: var(--cs-verde); }
+
+        /* ----- Seção Principal: GRÁFICO DE RADAR & PONTUAÇÃO ----- */
+        .radar-section {
+            background: var(--cs-card-bg);
+            border: 1px solid var(--cs-border);
+            border-radius: 12px;
+            padding: 24px 28px;
+            display: grid;
+            grid-template-columns: 1.35fr 0.65fr;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .radar-box-header {
+            margin-bottom: 16px;
+        }
+
+        .radar-box-tag {
+            color: var(--cs-verde);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .radar-box-titulo {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin: 4px 0 0 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .radar-seletor-mapa {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .btn-seletor-mapa {
+            background: #11151B;
+            border: 1px solid var(--cs-border);
+            color: var(--cs-texto-muted);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-seletor-mapa:hover {
+            color: #FFF;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-seletor-mapa.btn-seletor-ativo {
+            background: rgba(0, 210, 133, 0.15);
+            color: var(--cs-verde);
+            border-color: var(--cs-verde);
+        }
+
+        .radar-canvas-container {
+            width: 100%;
+            max-width: 580px;
+            margin: auto;
+            position: relative;
+        }
+
+        /* Lado direito do Radar: Estatísticas e Pontuação da Jogabilidade */
+        .radar-stats-info {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .pontuacao-box {
+            background: #11151B;
+            border: 1px solid var(--cs-border);
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pontuacao-numero {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--cs-verde);
+        }
+
+        .pontuacao-detalhes h4 {
+            margin: 0 0 4px 0;
+            font-size: 1.1rem;
+            color: #FFF;
+        }
+
+        .pontuacao-detalhes p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--cs-texto-muted);
+        }
+
+        .radar-atributos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .atributo-item {
+            background: #11151B;
+            border: 1px solid var(--cs-border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .atributo-label {
+            font-size: 0.75rem;
+            color: var(--cs-texto-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .atributo-val {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #FFF;
+        }
+
+        /* ----- Barra de Ordenação e Filtros ----- */
+        .mapas-secao-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .mapas-secao-titulo {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--cs-texto-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 0;
+        }
+
+        .sort-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sort-label {
+            font-size: 0.8rem;
+            color: var(--cs-texto-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-right: 4px;
+        }
+
+        .btn-sort {
+            background: var(--cs-card-bg);
+            border: 1px solid var(--cs-border);
+            color: var(--cs-texto-muted);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-sort.sort-active {
+            background: var(--cs-verde);
+            color: #0E1217;
+            border-color: var(--cs-verde);
+        }
+
+        /* ----- Grid de Cards de Mapas (MAP BREAKDOWN) ----- */
+        .mapas-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card-mapa {
+            background: var(--cs-card-bg);
+            border: 1px solid var(--cs-border);
+            border-radius: 12px;
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-mapa:hover,
+        .card-mapa.card-mapa-selecionado {
+            border-color: var(--cs-verde);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4), 0 0 14px rgba(0, 210, 133, 0.1);
+        }
+
+        .card-mapa-topo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-mapa-ident {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mapa-icone-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #202936;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #FFF;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-mapa-nome {
+            margin: 0;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #FFF;
+            line-height: 1.2;
+        }
+
+        .card-mapa-partidas {
+            margin: 0;
+            font-size: 0.82rem;
+            color: var(--cs-texto-muted);
+        }
+
+        .card-mapa-rank-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: #11151B;
+            border: 1px solid var(--cs-border);
+            color: #DDD;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Barra de Win Rate com proporção V / E / D */
+        .win-rate-bloco {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .win-rate-dados {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+        }
+
+        .win-rate-porcentagem {
+            font-size: 1.7rem;
+            font-weight: 800;
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1;
+        }
+
+        .win-rate-legenda {
+            font-size: 0.85rem;
+            color: var(--cs-texto-muted);
+            margin-left: 6px;
+        }
+
+        .win-rate-wed {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .wed-v { color: var(--cs-verde); }
+        .wed-e { color: #FFF; }
+        .wed-d { color: var(--cs-vermelho); }
+
+        .barra-win-rate {
+            width: 100%;
+            height: 6px;
+            background: var(--cs-vermelho);
+            border-radius: 999px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .barra-win-rate-v {
+            background: var(--cs-verde);
+            height: 100%;
+        }
+
+        /* Linha inferior de métricas (HLTV, KD, ADR, KAST) */
+        .card-mapa-metricas {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .metrica-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .metrica-titulo {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--cs-texto-muted);
+            text-transform: uppercase;
+        }
+
+        .metrica-valor {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #FFF;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* Responsividade */
+        .btn-voltar-topo {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--cs-border);
+            color: #AAB3C0;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-voltar-topo:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #FFFFFF;
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(-3px);
+        }
+
+        @media (max-width: 1100px) {
+            .resumo-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .radar-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .mapas-cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .dash-leetify {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
 
 <body>
 
     <div class="janela">
+        <!-- SIDEBAR ESQUERDA -->
         <div class="header-left">
             <h1>do<span class="prata">Prata</span>Ao<span class="global">Global</span></h1>
 
@@ -39,16 +654,21 @@
                 <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
             </div>
 
+            <div class="btn-nav-white" style="border: 1px solid rgba(242, 182, 50, 0.35); background: rgba(242, 182, 50, 0.08);">
+                <a href="../index.html" style="color: #F2B632; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <h3>Voltar ao Início</h3>
+                </a>
+            </div>
+
             <div class="btn-nav-white">
                 <a href="./cards.html">
-                    <h3>Aquários e Terrários</h3>
+                    <h3>Tempo Real</h3>
                 </a>
             </div>
 
             <div class="btn-nav">
-
-                <h3>Gráficos</h3>
-
+                <h3>Performance & Radar</h3>
             </div>
 
             <div class="btn-nav-white">
@@ -60,250 +680,504 @@
             <div class="btn-logout" onclick="limparSessao()">
                 <h3>Sair</h3>
             </div>
-
         </div>
 
-        <div class="dash">
-            <div id="alerta">
+        <!-- ÁREA PRINCIPAL DA DASHBOARD (ESTILO TRACKER / LEETIFY) -->
+        <div class="dash-leetify">
+
+            <!-- 1. BARRA DE PERFIL DO JOGADOR -->
+            <div class="perfil-header">
+                <div class="perfil-info-lado">
+                    <div class="perfil-avatar-wrap">
+                        <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=150&auto=format&fit=crop&q=80" alt="Avatar" class="perfil-avatar" id="avatar_usuario">
+                    </div>
+                    <div class="perfil-dados">
+                        <h2>
+                            <span id="nome_perfil">Jogador</span>
+                        </h2>
+                        <div class="perfil-status">
+                            <span class="status-online"><span class="status-dot"></span> Online</span>
+                            <span>•</span>
+                            <span id="contador_partidas">70 partidas analisadas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn sub-active"><i class="fa-solid fa-map-location-dot"></i> Mapas</button>
+                    <button class="sub-tab-btn"><i class="fa-solid fa-crosshairs"></i> Armas</button>
+                </div>
             </div>
 
-            <div class="btns-dash" id="btnAquario">
-                <!-- O gráfico é chamado de acordo com o id (fk_aquario) do banco  -->
+            <!-- Abas secundárias -->
+            <div class="perfil-tabs">
+                <button class="tab-btn">Overview</button>
+                <button class="tab-btn">Partidas</button>
+                <button class="tab-btn tab-active"><i class="fa-solid fa-chart-line"></i> Performance & Radar</button>
+                <button class="tab-btn">Destaques</button>
+                <button class="tab-btn">Estratégias</button>
             </div>
-            <div id="graficos">
-            </div>
-        </div>
-    </div>
 
+            <!-- 2. CARDS RESUMO DO TOPO -->
+            <div class="resumo-cards-grid">
+                <div class="card-stat">
+                    <div class="card-stat-header"><i class="fa-solid fa-layer-group"></i> Partidas Analisadas</div>
+                    <div class="card-stat-valor" id="total_partidas">70</div>
+                    <p class="card-stat-sub">Distribuídas em 6 mapas competitivos</p>
+                </div>
+
+                <div class="card-stat">
+                    <div class="card-stat-header"><i class="fa-solid fa-trophy"></i> Taxa de Vitória Geral</div>
+                    <div class="card-stat-valor val-amarelo" id="taxa_vitoria_geral">52.9%</div>
+                    <p class="card-stat-sub"><span class="wed-v">37 partidas ganhas</span></p>
+                </div>
+
+                <div class="card-stat">
+                    <div class="card-stat-header"><i class="fa-solid fa-fire"></i> Mais Jogado</div>
+                    <div class="card-stat-valor" id="mapa_mais_jogado">Inferno</div>
+                    <p class="card-stat-sub">22 partidas disputadas</p>
+                </div>
+
+                <div class="card-stat">
+                    <div class="card-stat-header"><i class="fa-solid fa-crown" style="color: var(--cs-verde);"></i> Maior Taxa de Vitória</div>
+                    <div class="card-stat-valor val-verde" id="mapa_maior_wr">Nuke</div>
+                    <p class="card-stat-sub"><span class="wed-v">7 partidas ganhas</span></p>
+                </div>
+            </div>
+
+            <!-- 3. PAINEL CENTRAL: GRÁFICO DE RADAR & PONTUAÇÃO DE JOGABILIDADE -->
+            <div class="radar-section">
+                <!-- Lado Esquerdo: O Gráfico de Radar -->
+                <div>
+                    <div class="radar-box-header">
+                        <span class="radar-box-tag"><i class="fa-solid fa-bullseye"></i> Diagnóstico de Habilidades</span>
+                        <h3 class="radar-box-titulo">Radar de Jogabilidade: <span id="radar_mapa_nome" style="color: var(--cs-verde);">Inferno</span></h3>
+                        
+                        <!-- Seletor Rápido de Mapa -->
+                        <div class="radar-seletor-mapa" id="radar_botoes_mapa">
+                            <!-- Inserido dinamicamente via JS -->
+                        </div>
+                    </div>
+
+                    <div class="radar-canvas-container">
+                        <canvas id="radarChartCanvas" width="560" height="560"></canvas>
+                    </div>
+                </div>
+
+                <!-- Lado Direito: Métricas e Pontuação do Mapa -->
+                <div class="radar-stats-info">
+                    <div class="pontuacao-box">
+                        <div class="pontuacao-detalhes">
+                            <h4 id="score_titulo">Pontuação de Jogabilidade</h4>
+                            <p id="score_sub">Desempenho no mapa selecionado</p>
+                        </div>
+                        <div class="pontuacao-numero" id="score_valor">84</div>
+                    </div>
+
+                    <div class="radar-atributos-grid">
+                        <div class="atributo-item">
+                            <span class="atributo-label">Mira & HS%</span>
+                            <span class="atributo-val" id="stat_mira" style="color: var(--cs-verde);">88 / 100</span>
+                        </div>
+                        <div class="atributo-item">
+                            <span class="atributo-label">Dano / ADR</span>
+                            <span class="atributo-val" id="stat_dano" style="color: var(--cs-amarelo);">82 / 100</span>
+                        </div>
+                        <div class="atributo-item">
+                            <span class="atributo-label">Utilidade (Smokes/Flash)</span>
+                            <span class="atributo-val" id="stat_utilidade" style="color: #60A5FA;">74 / 100</span>
+                        </div>
+                        <div class="atributo-item">
+                            <span class="atributo-label">Sobrevivência / K/D</span>
+                            <span class="atributo-val" id="stat_sobrevivencia" style="color: var(--cs-verde);">85 / 100</span>
+                        </div>
+                        <div class="atributo-item">
+                            <span class="atributo-label">Posicionamento</span>
+                            <span class="atributo-val" id="stat_posicionamento" style="color: var(--cs-verde);">90 / 100</span>
+                        </div>
+                        <div class="atributo-item">
+                            <span class="atributo-label">Impacto no Round</span>
+                            <span class="atributo-val" id="stat_impacto" style="color: var(--cs-amarelo);">86 / 100</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. SEÇÃO MAP BREAKDOWN (CARDS DETALHADOS POR MAPA) -->
+            <div>
+                <div class="mapas-secao-header">
+                    <h3 class="mapas-secao-titulo">Desempenho Detalhado por Mapa (Clique para ver no Radar)</h3>
+                    <div class="sort-controls">
+                        <span class="sort-label">Ordenar por:</span>
+                        <button class="btn-sort sort-active" onclick="ordenarMapas('partidas', this)">Mais Jogados</button>
+                        <button class="btn-sort" onclick="ordenarMapas('wr', this)">Taxa de Vitória</button>
+                    </div>
+                </div>
+
+                <div class="mapas-cards-grid" id="mapas_grid">
+                    <!-- Cards inseridos dinamicamente via JS -->
+                </div>
+            </div>
+
+        </div><!-- fim dash-leetify -->
+    </div><!-- fim janela -->
 
 </body>
 
 </html>
 
 <script>
-    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    // Recupera dados do usuário na sessão
+    document.getElementById("b_usuario").innerHTML = sessionStorage.NOME_USUARIO || "usuário";
+    document.getElementById("nome_perfil").innerHTML = sessionStorage.NOME_USUARIO || "Jogador";
 
-    let proximaAtualizacao;
+    // ================================================================
+    // DADOS DOS MAPAS & ATRIBUTOS DE JOGABILIDADE
+    // ================================================================
+    var listaMapas = [
+        {
+            id: 'inferno',
+            nome: 'Inferno',
+            partidas: 22,
+            vitorias: 9,
+            empates: 3,
+            derrotas: 10,
+            wr: 41,
+            hltv: 1.05,
+            kd: 1.12,
+            adr: 81.7,
+            kast: 64.2,
+            rank: 'Ouro IV',
+            // Atributos de 0 a 100 para o Radar Chart
+            radar: [88, 82, 74, 85, 90, 86],
+            score: 84
+        },
+        {
+            id: 'mirage',
+            nome: 'Mirage',
+            partidas: 20,
+            vitorias: 10,
+            empates: 1,
+            derrotas: 9,
+            wr: 50,
+            hltv: 1.18,
+            kd: 1.24,
+            adr: 84.3,
+            kast: 72.0,
+            rank: 'AK I',
+            radar: [92, 85, 80, 88, 86, 91],
+            score: 87
+        },
+        {
+            id: 'nuke',
+            nome: 'Nuke',
+            partidas: 8,
+            vitorias: 7,
+            empates: 0,
+            derrotas: 1,
+            wr: 87.5,
+            hltv: 1.45,
+            kd: 1.55,
+            adr: 92.1,
+            kast: 81.5,
+            rank: 'Xerife',
+            radar: [95, 94, 88, 92, 90, 96],
+            score: 93
+        },
+        {
+            id: 'dust2',
+            nome: 'Dust II',
+            partidas: 10,
+            vitorias: 6,
+            empates: 1,
+            derrotas: 3,
+            wr: 60,
+            hltv: 1.20,
+            kd: 1.18,
+            adr: 83.5,
+            kast: 68.4,
+            rank: 'AK II',
+            radar: [89, 81, 70, 84, 82, 85],
+            score: 82
+        },
+        {
+            id: 'ancient',
+            nome: 'Ancient',
+            partidas: 6,
+            vitorias: 3,
+            empates: 1,
+            derrotas: 2,
+            wr: 50,
+            hltv: 1.10,
+            kd: 1.08,
+            adr: 78.9,
+            kast: 66.0,
+            rank: 'Ouro III',
+            radar: [80, 78, 82, 79, 81, 80],
+            score: 80
+        },
+        {
+            id: 'anubis',
+            nome: 'Anubis',
+            partidas: 4,
+            vitorias: 2,
+            empates: 0,
+            derrotas: 2,
+            wr: 50,
+            hltv: 1.08,
+            kd: 1.05,
+            adr: 76.4,
+            kast: 65.0,
+            rank: 'Ouro II',
+            radar: [78, 75, 76, 78, 77, 76],
+            score: 77
+        }
+    ];
 
-    window.onload = exibirAquariosDoUsuario();
+    var mapaSelecionado = listaMapas[0];
+    var radarChartInstancia = null;
 
-    function exibirAquariosDoUsuario() {
-        var aquarios = JSON.parse(sessionStorage.AQUARIOS);
-        aquarios.forEach(item => {
-            document.getElementById("btnAquario").innerHTML += `
-            <button class="btn-chart" onclick="exibirAquario(${item.id})" id="btnAquario${item.id}">${item.descricao}</button>
-            `
+    // ================================================================
+    // INICIALIZAÇÃO DO GRÁFICO DE RADAR COM CHART.JS
+    // (Utilizando a estrutura oficial de config e data fornecida)
+    // ================================================================
+    
+    // 1. SETUP DOS DADOS (DATA)
+    const data = {
+        labels: [
+            'Mira (HS%)',
+            'Dano (ADR)',
+            'Utilidade (Nades)',
+            'Sobrevivência (K/D)',
+            'Posicionamento (KAST)',
+            'Impacto no Round'
+        ],
+        datasets: [
+            {
+                /* mensagem em baixo do radar */
 
-            document.getElementById("graficos").innerHTML += `
-                <div id="grafico${item.id}" class="display-none">
-                    <h3 class="tituloGraficos">
-                        <span id="tituloAquario${item.id}">${item.descricao}</span>
-                    </h3>
-                    <div class="graph">
-                        <canvas id="myChartCanvas${item.id}"></canvas>
+                label: 'Seu Desempenho (' + mapaSelecionado.nome + ')',
+                data: mapaSelecionado.radar,
+                fill: true,
+                backgroundColor: 'rgba(0, 210, 133, 0.2)',
+                borderColor: 'rgb(0, 210, 133)',
+                pointBackgroundColor: 'rgb(0, 210, 133)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(0, 210, 133)'
+            },
+            {
+                /* mensagem em baixo do radar */
+                label: 'Melhor Desempenho (Todas as partidas)',
+                data: [85, 85, 85, 85, 85, 85],
+                fill: true,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgb(54, 162, 235)',
+                pointBackgroundColor: 'rgb(54, 162, 235)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(54, 162, 235)'
+            }
+        ]
+    };
+
+    // 2. CONFIGURAÇÃO (CONFIG)
+    const config = {
+        type: 'radar',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            elements: {
+                line: {
+                    borderWidth: 3
+                }
+            },
+            scales: {
+                r: {
+                    min: 40,
+                    max: 100,
+                    ticks: {
+                        stepSize: 20,
+                        color: '#8E9BAE',
+                        backdropColor: 'transparent',
+                        font: { size: 10 }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    angleLines: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    pointLabels: {
+                        color: '#E2E8F0',
+                        font: {
+                            size: 11,
+                            weight: '600'
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        color: '#CBD5E1',
+                        font: { size: 11 }
+                    }
+                }
+            }
+        }
+    };
+
+    function criarRadarChart() {
+        const ctx = document.getElementById('radarChartCanvas');
+        radarChartInstancia = new Chart(ctx, config);
+    }
+
+    // ================================================================
+    // ATUALIZAR RADAR AO CLICAR EM UM MAPA
+    // ================================================================
+    function selecionarMapaParaRadar(idMapa) {
+        var mapa = listaMapas.find(m => m.id === idMapa);
+        if (!mapa) return;
+
+        mapaSelecionado = mapa;
+
+        // Atualiza textos e scores
+        document.getElementById('radar_mapa_nome').textContent = mapa.nome;
+        document.getElementById('score_valor').textContent = mapa.score;
+        document.getElementById('stat_mira').textContent = mapa.radar[0] + ' / 100';
+        document.getElementById('stat_dano').textContent = mapa.radar[1] + ' / 100';
+        document.getElementById('stat_utilidade').textContent = mapa.radar[2] + ' / 100';
+        document.getElementById('stat_sobrevivencia').textContent = mapa.radar[3] + ' / 100';
+        document.getElementById('stat_posicionamento').textContent = mapa.radar[4] + ' / 100';
+        document.getElementById('stat_impacto').textContent = mapa.radar[5] + ' / 100';
+
+        // Atualiza botões do seletor
+        renderizarBotoesSeletor();
+
+        // Destaca o card do mapa selecionado
+        document.querySelectorAll('.card-mapa').forEach(c => c.classList.remove('card-mapa-selecionado'));
+        var cardEl = document.getElementById('card_mapa_' + idMapa);
+        if (cardEl) cardEl.classList.add('card-mapa-selecionado');
+
+        // Atualiza o gráfico do Chart.js via update()
+        if (radarChartInstancia) {
+            radarChartInstancia.data.datasets[0].label = 'Seu Desempenho (' + mapa.nome + ')';
+            radarChartInstancia.data.datasets[0].data = mapa.radar;
+            radarChartInstancia.update();
+        }
+    }
+
+    // ================================================================
+    // RENDERIZAR BOTÕES RÁPIDOS DO RADAR
+    // ================================================================
+    function renderizarBotoesSeletor() {
+        var container = document.getElementById('radar_botoes_mapa');
+        container.innerHTML = '';
+
+        listaMapas.forEach(mapa => {
+            var btn = document.createElement('button');
+            btn.className = 'btn-seletor-mapa' + (mapa.id === mapaSelecionado.id ? ' btn-seletor-ativo' : '');
+            btn.textContent = mapa.nome;
+            btn.onclick = () => selecionarMapaParaRadar(mapa.id);
+            container.appendChild(btn);
+        });
+    }
+
+    // ================================================================
+    // RENDERIZAR CARDS DE MAPAS (MAP BREAKDOWN)
+    // ================================================================
+    function renderizarCardsMapas() {
+        var grid = document.getElementById('mapas_grid');
+        grid.innerHTML = '';
+
+        listaMapas.forEach(mapa => {
+            var card = document.createElement('div');
+            card.className = 'card-mapa' + (mapa.id === mapaSelecionado.id ? ' card-mapa-selecionado' : '');
+            card.id = 'card_mapa_' + mapa.id;
+            card.onclick = () => selecionarMapaParaRadar(mapa.id);
+
+            // Cor da taxa de vitória
+            var wrCor = mapa.wr >= 60 ? 'var(--cs-verde)' : mapa.wr >= 45 ? 'var(--cs-amarelo)' : 'var(--cs-vermelho)';
+
+            card.innerHTML = `
+                <div class="card-mapa-topo">
+                    <div class="card-mapa-ident">
+                        <div class="mapa-icone-badge">${mapa.nome.substring(0,2).toUpperCase()}</div>
+                        <div>
+                            <h4 class="card-mapa-nome">${mapa.nome}</h4>
+                            <p class="card-mapa-partidas"><span class="wed-v">${mapa.vitorias} partidas ganhas</span></p>
+                        </div>
                     </div>
-                    <div class="label-captura">
-                        <p id="avisoCaptura${item.id}" style="color: white"></p>
+                    <div class="card-mapa-rank-badge">${mapa.rank}</div>
+                </div>
+
+                <div class="win-rate-bloco">
+                    <div class="win-rate-dados">
+                        <div>
+                            <span class="win-rate-porcentagem" style="color: ${wrCor};">${mapa.wr}%</span>
+                            <span class="win-rate-legenda">taxa de vitória</span>
+                        </div>
+                        <div class="win-rate-wed">
+                            <span class="wed-v">${mapa.vitorias} partidas ganhas</span>
+                        </div>
+                    </div>
+                    <div class="barra-win-rate">
+                        <div class="barra-win-rate-v" style="width: ${mapa.wr}%;"></div>
                     </div>
                 </div>
-            `
 
-            obterDadosGrafico(item.id)
+                <div class="card-mapa-metricas">
+                    <div class="metrica-item">
+                        <span class="metrica-titulo">HLTV 2.0</span>
+                        <span class="metrica-valor">${mapa.hltv.toFixed(2)}</span>
+                    </div>
+                    <div class="metrica-item">
+                        <span class="metrica-titulo">K/D</span>
+                        <span class="metrica-valor">${mapa.kd.toFixed(2)}</span>
+                    </div>
+                    <div class="metrica-item">
+                        <span class="metrica-titulo">ADR</span>
+                        <span class="metrica-valor">${mapa.adr.toFixed(1)}</span>
+                    </div>
+                    <div class="metrica-item">
+                        <span class="metrica-titulo">KAST</span>
+                        <span class="metrica-valor">${mapa.kast.toFixed(1)}%</span>
+                    </div>
+                </div>
+            `;
+
+            grid.appendChild(card);
         });
-
-        if (aquarios.length > 0) {
-            exibirAquario(aquarios[0].id)
-        }
     }
 
-    function alterarTitulo(idAquario) {
-        var tituloAquario = document.getElementById(`tituloAquario${idAquario}`)
-        var descricao = JSON.parse(sessionStorage.AQUARIOS).find(item => item.id == idAquario).descricao;
-        tituloAquario.innerHTML = "Últimas medidas do <span style='color: #e6005a'>" + descricao + "</span>"
-    }
+    // ================================================================
+    // ORDENAR MAPAS
+    // ================================================================
+    function ordenarMapas(criterio, btnClicado) {
+        document.querySelectorAll('.btn-sort').forEach(b => b.classList.remove('sort-active'));
+        btnClicado.classList.add('sort-active');
 
-    function exibirAquario(idAquario) {
-        let todosOsGraficos = JSON.parse(sessionStorage.AQUARIOS);
-
-        for (i = 0; i < todosOsGraficos.length; i++) {
-            // exibindo - ou não - o gráfico
-            if (todosOsGraficos[i].id != idAquario) {
-                let elementoAtual = document.getElementById(`grafico${todosOsGraficos[i].id}`)
-                if (elementoAtual.classList.contains("display-block")) {
-                    elementoAtual.classList.remove("display-block")
-                }
-                elementoAtual.classList.add("display-none")
-
-                // alterando estilo do botão
-                let btnAtual = document.getElementById(`btnAquario${todosOsGraficos[i].id}`)
-                if (btnAtual.classList.contains("btn-pink")) {
-                    btnAtual.classList.remove("btn-pink")
-                }
-                btnAtual.classList.add("btn-white")
-            }
+        if (criterio === 'partidas') {
+            listaMapas.sort((a, b) => b.partidas - a.partidas);
+        } else if (criterio === 'wr') {
+            listaMapas.sort((a, b) => b.wr - a.wr);
+        } else if (criterio === 'kd') {
+            listaMapas.sort((a, b) => b.kd - a.kd);
         }
 
-        // exibindo - ou não - o gráfico
-        let graficoExibir = document.getElementById(`grafico${idAquario}`)
-        graficoExibir.classList.remove("display-none")
-        graficoExibir.classList.add("display-block")
-
-        // alterando estilo do botão
-        let btnExibir = document.getElementById(`btnAquario${idAquario}`)
-        btnExibir.classList.remove("btn-white")
-        btnExibir.classList.add("btn-pink")
+        renderizarCardsMapas();
     }
 
-    // O gráfico é construído com três funções:
-    // 1. obterDadosGrafico -> Traz dados do Banco de Dados para montar o gráfico da primeira vez
-    // 2. plotarGrafico -> Monta o gráfico com os dados trazidos e exibe em tela
-    // 3. atualizarGrafico -> Atualiza o gráfico, trazendo novamente dados do Banco
-
-    // Esta função *obterDadosGrafico* busca os últimos dados inseridos em tabela de medidas.
-    // para, quando carregar o gráfico da primeira vez, já trazer com vários dados.
-    // A função *obterDadosGrafico* também invoca a função *plotarGrafico*
-
-    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-    //     Para ajustar o "select", ajuste o comando sql em src/models
-    function obterDadosGrafico(idAquario) {
-
-        alterarTitulo(idAquario)
-
-        if (proximaAtualizacao != undefined) {
-            clearTimeout(proximaAtualizacao);
-        }
-
-        fetch(`/medidas/ultimas/${idAquario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (resposta) {
-                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-                    resposta.reverse();
-
-                    plotarGrafico(resposta, idAquario);
-
-                });
-            } else {
-                console.error('Nenhum dado encontrado ou erro na API');
-            }
-        })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
-    }
-
-    // Esta função *plotarGrafico* usa os dados capturados na função anterior para criar o gráfico
-    // Configura o gráfico (cores, tipo, etc), materializa-o na página e, 
-    // A função *plotarGrafico* também invoca a função *atualizarGrafico*
-    function plotarGrafico(resposta, idAquario) {
-
-        console.log('iniciando plotagem do gráfico...');
-
-        // Criando estrutura para plotar gráfico - labels
-        let labels = [];
-
-        // Criando estrutura para plotar gráfico - dados
-        let dados = {
-            labels: labels,
-            datasets: [
-            {
-                label: 'Temperatura',
-                data: [],
-                fill: false,
-                borderColor: 'rgb(199, 52, 52)',
-                tension: 0.1
-            }]
-        };
-
-        console.log('----------------------------------------------')
-        console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
-        console.log(resposta)
-
-        // Inserindo valores recebidos em estrutura para plotar o gráfico
-        for (i = 0; i < resposta.length; i++) {
-            var registro = resposta[i];
-            labels.push(registro.momento_grafico);
-            dados.datasets[0].data.push(registro.temperatura);
-        }
-
-        console.log('----------------------------------------------')
-        console.log('O gráfico será plotado com os respectivos valores:')
-        console.log('Labels:')
-        console.log(labels)
-        console.log('Dados:')
-        console.log(dados.datasets)
-        console.log('----------------------------------------------')
-
-        // Criando estrutura para plotar gráfico - config
-        const config = {
-            type: 'line',
-            data: dados,
-        };
-
-        // Adicionando gráfico criado em div na tela
-        let myChart = new Chart(
-            document.getElementById(`myChartCanvas${idAquario}`),
-            config
-        );
-
-        setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-    }
-
-
-    // Esta função *atualizarGrafico* atualiza o gráfico que foi renderizado na página,
-    // buscando a última medida inserida em tabela contendo as capturas, 
-
-    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-    //     Para ajustar o "select", ajuste o comando sql em src/models
-    function atualizarGrafico(idAquario, dados, myChart) {
-
-
-
-        fetch(`/medidas/tempo-real/${idAquario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (novoRegistro) {
-
-                    obterdados(idAquario);
-                    // alertar(novoRegistro, idAquario);
-                    console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
-                    console.log(`Dados atuais do gráfico:`);
-                    console.log(dados);
-
-                    let avisoCaptura = document.getElementById(`avisoCaptura${idAquario}`)
-                    avisoCaptura.innerHTML = ""
-
-
-                    if (novoRegistro[0].momento_grafico == dados.labels[dados.labels.length - 1]) {
-                        console.log("---------------------------------------------------------------")
-                        console.log("Como não há dados novos para captura, o gráfico não atualizará.")
-                        avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
-                        console.log("Horário do novo dado capturado:")
-                        console.log(novoRegistro[0].momento_grafico)
-                        console.log("Horário do último dado capturado:")
-                        console.log(dados.labels[dados.labels.length - 1])
-                        console.log("---------------------------------------------------------------")
-                    } else {
-                        // tirando e colocando valores no gráfico
-                        dados.labels.shift(); // apagar o primeiro
-                        dados.labels.push(novoRegistro[0].momento_grafico); // incluir um novo momento
-
-                        dados.datasets[0].data.shift();  // apagar o primeiro de temperatura
-                        dados.datasets[0].data.push(novoRegistro[0].temperatura); // incluir uma nova medida de temperatura
-
-                        myChart.update();
-                    }
-
-                    // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                    proximaAtualizacao = setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-                });
-            } else {
-                console.error('Nenhum dado encontrado ou erro na API');
-                // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                proximaAtualizacao = setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-            }
-        })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
-
-    }
+    // ================================================================
+    // INICIALIZAÇÃO AO CARREGAR A PÁGINA
+    // ================================================================
+    window.onload = function() {
+        renderizarBotoesSeletor();
+        criarRadarChart();
+        renderizarCardsMapas();
+    };
 </script>

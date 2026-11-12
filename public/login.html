@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt_br">
 
 <head>
@@ -31,6 +31,9 @@
                 <li>
                     <a href="simulador.html">Simulador</a>
                 </li>
+                <li>
+                    <a href="./dashboard/dashboard.html">Análise</a>
+                </li>
                 <li>|</li>
                 <li class="agora">
                     <a href="#">Login</a>
@@ -51,7 +54,7 @@
         </div>
         <div class="container">
             <div class="card card-login">
-                <h2>Bem Vindo Novamente!!!</h2>
+                <h2>Login</h2>
                 <div class="formulario">
                     <div class="campo">
                         <span>E-mail:</span>
@@ -97,7 +100,7 @@
 
         if (emailVar == "" || senhaVar == "") {
             cardErro.style.display = "block"
-            mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
+            mensagem_erro.innerHTML = "Preencha todos os campos para realizar o login.";
             finalizarAguardar();
             return false;
         }
@@ -149,6 +152,9 @@
 
         }).catch(function (erro) {
             console.log(erro);
+            finalizarAguardar();
+            cardErro.style.display = "block";
+            mensagem_erro.innerHTML = "Erro de conexão com o servidor.";
         })
 
         return false;

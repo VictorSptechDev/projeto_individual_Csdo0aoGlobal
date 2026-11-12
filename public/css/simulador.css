@@ -8,6 +8,208 @@
 
 .simulador .container {
   flex-direction: column;
-  overflow: scroll;
-  height: var(--tamanho-simulador);
+  overflow-y: auto;
+  min-height: var(--tamanho-simulador);
+  padding: 32px 0;
+  gap: 20px;
 }
+
+.simulador h2 {
+  margin: 0 0 4px 0;
+  font-size: 1.8rem;
+  color: #f0f0f0;
+}
+
+.simulador > .container > p {
+  margin: 0 0 20px 0;
+  color: #aaaaaa;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ==============================
+   DASHBOARD DA PARTIDA (SIM)
+   ============================== */
+
+.sim-dashboard {
+  width: 100%;
+  background: rgba(20, 20, 26, 0.95);
+  border: 1px solid #2a2a2e;
+  border-radius: 14px;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sim-dash-titulo {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #cccccc;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #2a2a2e;
+  padding-bottom: 14px;
+}
+
+/* -- Placar -- */
+
+.sim-placar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+
+.sim-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.sim-time-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sim-ct .sim-time-label { color: #3a8fd4; }
+.sim-tr .sim-time-label { color: #d4aa00; }
+
+.sim-placar-num {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.sim-ct .sim-placar-num { color: #4fa3e8; }
+.sim-tr .sim-placar-num { color: #f5c518; }
+
+.sim-placar-meio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.sim-round-label {
+  font-size: 0.75rem;
+  color: #888888;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sim-round-num {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  line-height: 1;
+}
+
+/* -- Controles -- */
+
+.sim-controles {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.sim-btn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sim-btn-ct {
+  background-color: #1b4f8a;
+  color: #fff;
+}
+
+.sim-btn-ct:hover {
+  background-color: #2563b0;
+}
+
+.sim-btn-tr {
+  background-color: #7a6000;
+  color: #fff;
+}
+
+.sim-btn-tr:hover {
+  background-color: #a07d00;
+}
+
+.sim-btn-reset {
+  background-color: #2a2a2e;
+  color: #cccccc;
+  border: 1px solid #3a3a3e;
+}
+
+.sim-btn-reset:hover {
+  background-color: #3a3a3e;
+  color: #fff;
+}
+
+/* -- Log de rounds -- */
+
+.sim-log-box {
+  background-color: #0d0d0f;
+  border: 1px solid #2a2a2e;
+  border-radius: 10px;
+  padding: 16px 20px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.sim-log-titulo {
+  margin: 0 0 10px 0;
+  font-size: 0.8rem;
+  color: #888888;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sim-log-entrada {
+  margin: 0 0 6px 0;
+  font-size: 0.9rem;
+}
+
+.log-ct { color: #4fa3e8; }
+.log-tr { color: #f5c518; }
+
+/* -- Resultado final -- */
+
+.sim-resultado {
+  padding: 16px 20px;
+  border-radius: 10px;
+  font-size: 1.15rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.sim-resultado-ct {
+  background-color: #0a2545;
+  border: 2px solid #4fa3e8;
+  color: #4fa3e8;
+}
+
+.sim-resultado-tr {
+  background-color: #2a1f00;
+  border: 2px solid #f5c518;
+  color: #f5c518;
+}
+
+.sim-resultado-empate {
+  background-color: #1a1a1e;
+  border: 2px solid #888888;
+  color: #cccccc;
+}
+
