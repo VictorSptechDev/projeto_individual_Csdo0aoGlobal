@@ -1,0 +1,19 @@
+option[value="cobblestone"] {         /* INDICANDO MAPA NOVO */ 
+    color: green;
+}
+
+.botao-aceitar {
+    background-color: #01a85a;      /* cor do retangulo por fora do btn */ 
+    color: #ffffff;                  /* cor txt btn */ 
+    border: none;                        /* arrendondar ou não */ 
+    padding: 10px 20px;                     /* ancora de espaço entre o retangulo internamente */       
+    border-radius: 5px;                     /* arredonda o raio em 5 px*/
+    cursor: pointer;  /* faz o btn virar uma mao qnd passa por cima */
+
+
+}
+
+.botao-aceitar:hover {
+    background-color: #157347;   /*  enquanto o mouse esta sobre deixa verde mais escuro usando a função hover */ 
+
+}
