@@ -1,5 +1,61 @@
+.conteudo-dashboard {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.conteudo-dashboard h1 {
+    margin-top: 12px;
+}
+
+.conteudo-dashboard h2,
+.conteudo-dashboard h3 {
+    margin: 20px 0 12px;
+}
+
+.conteudo-dashboard select {
+    margin-bottom: 16px;
+    padding: 8px;
+}
+
+#imagemMapa {
+    display: block;
+    width: min(100%, 720px);
+    aspect-ratio: 16 / 9;
+    height: auto;
+    margin: 16px auto 24px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+#imagemMapa[hidden] {
+    display: none;
+}
+
 option[value="cobblestone"] {         /* INDICANDO MAPA NOVO */ 
     color: green;
+}
+
+.botao-voltar {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 10;
+    display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #444;
+    color: #ffffff;
+    font-size: 28px;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.botao-voltar:hover {
+    background-color: #2b2b2b;
 }
 
 .botao-aceitar {
@@ -17,3 +73,23 @@ option[value="cobblestone"] {         /* INDICANDO MAPA NOVO */
     background-color: #157347;   /*  enquanto o mouse esta sobre deixa verde mais escuro usando a função hover */ 
 
 }
+
+.video-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.85);
+}
+
+.video-overlay[hidden] {
+    display: none;
+}
+
+.video-overlay video {
+    width: min(90vw, 900px);
+    max-height: 85vh;
+}
+

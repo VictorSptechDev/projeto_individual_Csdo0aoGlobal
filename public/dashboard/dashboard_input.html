@@ -7,31 +7,90 @@
     <link rel="stylesheet" href="../css/dashboard_input.css">
 </head>
 <body>
-    <h1>Bem Vindo a Dashboard de Análise da Partida jogada</h1><br><br>
-
-
-    <h2>Insira os Dados da partida jogada</h2>
     
+<a class="botao-voltar" href="../index.html" aria-label="Voltar para a página inicial" title="Voltar para a página inicial">&larr;</a>
+
+
+<div class="conteudo-dashboard">
+    <h1>Bem Vindo a Dashboard de Análise da Partida jogada</h1>
+    <h2>Insira os Dados da partida jogada</h2>
     <h3>Selecione o Mapa Jogado:</h3>
-   <select name="time1" id="time1" required>
-    <option value="" disabled selected>Selecione o mapa jogado</option>
-    <option value="mirage">Mirage</option>
-    <option value="dust">Dust2</option>
-    <option value="nuke">Nuke</option>
-    <option value="inferno">Inferno</option>
-    <option value="anubis">Anubis</option>
-    <option value="cache">Cache</option>
-    <option value="ancient">Ancient</option>
-    <option value="cobblestone">Cobblestone (novo)</option>
-</select>
-<br>
+    <select name="mapa" id="mapa" required onchange="mostrarImagemMapa()">
+        <option value="" disabled selected>Selecione o mapa jogado</option>
+        <option value="mirage">Mirage</option>
+        <option value="dust">Dust2</option>
+        <option value="nuke">Nuke</option>
+        <option value="inferno">Inferno</option>
+        <option value="anubis">Anubis</option>
+        <option value="cache">Cache</option>
+        <option value="ancient">Ancient</option>
+        <option value="cobblestone">Cobblestone (novo)</option>
+    </select>
 
-<button class="botao-aceitar" onclick="aceitar()">ACEITAR</button>
+    <img id="imagemMapa" alt="Prévia do mapa selecionado" hidden>
 
-</body>
-</html>
+    <button class="botao-aceitar" onclick="aceitar()">ACEITAR</button>
+</div>
+
+<div id="videoOverlay" class="video-overlay" hidden>
+    <video id="videoAceitar" controls playsinline>
+        <source src="../assets/video_aceitar/aceitar_final.mp4" type="video/mp4">
+    </video>
+</div>
+
 <script>
     function aceitar() {
-       
+        const overlay = document.getElementById("videoOverlay");
+        const video = document.getElementById("videoAceitar");
+
+        overlay.hidden = false;
+        video.currentTime = 0;
+        video.play().catch(function () {
+            overlay.hidden = true;
+            alert("Não foi possível reproduzir o vídeo. Verifique se o arquivo está disponível.");
+        });
+    }
+
+    document.getElementById("videoAceitar").addEventListener("ended", function () {
+        document.getElementById("videoOverlay").hidden = true;
+    });
+
+    function mostrarImagemMapa() {
+        let valoresMapas = [
+            "mirage",
+            "dust",                               /*UTILIZANDO VETOR PARA ARMAZENAR LISTA DOS MAPAS */
+            "nuke",
+            "inferno",
+            "anubis",
+            "cache",
+            "ancient",
+            "cobblestone"
+        ];
+        let caminhosImagens = [
+            "../assets/mapas/de_mirage.webp",                   /*mirage */
+            "../assets/mapas/csgo-dust-2-map.avif",                      /*dust2 */
+            "../assets/mapas/1296339-vertical-nuke-hd-wallpaper-1920x1080-for-ipad.jpg",              /*nuke */          
+            "../assets/mapas/cs-2-inferno.jpeg",                           /*inferno */
+            "../assets/mapas/1067px-CS2_de_anubis.png",                    /*anubis */
+            "../assets/mapas/mbwk627.jpeg",                                /*cache */
+            "../assets/mapas/image_processing20251118-1-uu0e4l.webp",      /*ancient */
+            "../assets/mapas/news-cs2-cobblestone-2026-1279.ed27c5cccf13dcd1.webp"  /*cobblestone */
+        ];
+        let encontrouImagem = false;
+
+        for (let i = 0; i < valoresMapas.length; i++) {
+            if (mapa.value === valoresMapas[i]) {
+                imagemMapa.src = caminhosImagens[i];
+                imagemMapa.alt = "Imagem do mapa " + valoresMapas[i];
+                imagemMapa.hidden = false;
+                encontrouImagem = true;
+            }
+        }
+
+        if (encontrouImagem === false) {
+            imagemMapa.hidden = true;     /* PRECISA DEIXAR DECLARADO COMO TRUE SENÃO ELE CONTINUA APARECENDO, ERRO RESOLVIDO */
+        }
     }
 </script>
+</body>
+</html>
