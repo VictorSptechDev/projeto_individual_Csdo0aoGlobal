@@ -11,11 +11,12 @@
 <a class="botao-voltar" href="../index.html" aria-label="Voltar para a página inicial" title="Voltar para a página inicial">&larr;</a>
 
 
+
 <div class="conteudo-dashboard">
     <h1>Bem Vindo a Dashboard de Análise da Partida jogada</h1>
     <h2>Insira os Dados da partida jogada</h2>
     <h3>Selecione o Mapa Jogado:</h3>
-    <select name="mapa" id="mapa" required onchange="mostrarImagemMapa()">
+    <select id="mapa" required onchange="mostrarImagemMapa()">
         <option value="" disabled selected>Selecione o mapa jogado</option>
         <option value="mirage">Mirage</option>
         <option value="dust">Dust2</option>
@@ -28,31 +29,135 @@
     </select>
 
     <img id="imagemMapa" alt="Prévia do mapa selecionado" hidden>
+    <br><br><br>
+    Jogou com Amigos ou Solo?
+    <select id="jogouComAmigos" required onchange="mostrarCampoNickname()"> 
+        <option value="" disabled selected>Selecione uma opção</option>
+        <option value="amigos">Com Amigos</option>
+        <option value="solo">Solo</option>
+    </select>
+
+    <div id="campoNickname" hidden>
+        <label for="nicknameAmigo">Nickname do amigo:</label>
+        <input type="text" id="nicknameAmigo" placeholder="Digite o nickname">
+        <br><br>
+    </div>
+
+    <section>
+        <h3>Suas estatísticas da partida</h3>
+        <div>
+            <label for="eliminacoesUsuario">Suas eliminações</label><br>
+            <input type="number" id="eliminacoesUsuario" min="0" step="1"><br>
+        </div>
+        <div>
+            <label for="taxaHsUsuario">Sua taxa de HS (%)</label> <br>
+            <input type="number" id="taxaHsUsuario" min="0" max="100" step="1"><br>
+        </div>
+        <div>
+            <label for="mortesUsuario">Suas mortes</label> <br>
+            <input type="number" id="mortesUsuario" min="0" step="1"><br>
+        </div>
+        <div>
+            <label for="danoUsuario">Seu dano total causado</label><br>
+            <input type="number" id="danoUsuario" min="0" step="1"><br>
+            <br>
+        </div>
+    </section>
+
+    <section id="estatisticasAmigo" hidden>
+        <h3>Estatísticas do amigo</h3>
+        <div>
+            <label for="eliminacoesAmigo">Eliminações do amigo</label> <br>
+            <input type="number" id="eliminacoesAmigo" min="0" step="1"><br>
+        </div>
+        <div>
+            <label for="taxaHsAmigo">Taxa de HS do amigo (%)</label><br>
+            <input type="number" id="taxaHsAmigo" min="0" max="100" step="1"><br>
+        </div>
+        <div>
+            <label for="mortesAmigo">Mortes do amigo</label><br>
+            <input type="number" id="mortesAmigo" min="0" step="1"><br>
+        </div>
+        <div>
+            <label for="danoAmigo">Dano total causado pelo amigo</label> <br>
+            <input type="number" id="danoAmigo" min="0" step="1"><br><br>
+            <br>
+        </div>
+    </section>
 
     <button class="botao-aceitar" onclick="aceitar()">ACEITAR</button>
+    
 </div>
 
 <div id="videoOverlay" class="video-overlay" hidden>
-    <video id="videoAceitar" controls playsinline>
+    <video id="videoAceitar" playsinline>
         <source src="../assets/video_aceitar/aceitar_final.mp4" type="video/mp4">
     </video>
 </div>
 
 <script>
-    function aceitar() {
-        const overlay = document.getElementById("videoOverlay");
-        const video = document.getElementById("videoAceitar");
 
-        overlay.hidden = false;
-        video.currentTime = 0;
-        video.play().catch(function () {
-            overlay.hidden = true;
-            alert("Não foi possível reproduzir o vídeo. Verifique se o arquivo está disponível.");
-        });
+    /*APRENDIZADO:
+    USANDO A FUNÇÃO video overlay para o video "saltar na tela (dica do leo), e escurecer o fundo, api nativa de videos do javascript " */
+
+    function aceitar() {
+    let dadosValidos = true;
+
+    if (jogouComAmigos.value === "amigos") {
+        let nickname = nicknameAmigo.value.trim(); // trim remove os espaços entre o texto apenas para pegar o value bruto, sem espaços no inicio e no final
+
+        if (nickname[0] !== "@" || nickname.indexOf("@", 1) !== -1 || nickname.length === 1) {
+            alert("Nickname inválido. Use exatamente um @ no início, por exemplo: @jogador.");
+            dadosValidos = false;
+        }
     }
 
-    document.getElementById("videoAceitar").addEventListener("ended", function () {
-        document.getElementById("videoOverlay").hidden = true;
+    if (!taxaHsUsuario.checkValidity()) {
+        alert("Sua taxa de HS deve ser um número inteiro entre 0 e 100.");
+        dadosValidos = false;
+    }
+
+    if (jogouComAmigos.value === "amigos" && !taxaHsAmigo.checkValidity()) {
+        alert("A taxa de HS do amigo deve ser um número inteiro entre 0 e 100.");
+        dadosValidos = false;
+    }
+
+    if (dadosValidos) {
+    videoOverlay.hidden = false;
+
+            // aprendizado: video overlay = div que contem o video, hidden = true = escondido, false = visivel
+            // video aparece quando clica o btn
+            // vale lembrar q o valor de hidden funciona ao contrario
+
+    videoAceitar.currentTime = 0;    // mostrar posição atual do video quando ele vai começar
+
+    videoAceitar.play().catch(function () {
+        videoOverlay.hidden = true;
+        alert("Não foi possível reproduzir o vídeo.");
+
+        // aprendizado: catch = captura de erro, caso o video não consiga ser reproduzido, ele vai esconder o video e mostrar um alert dizendo que não foi possivel reproduzir o video
+        
+    });
+    }
+}
+
+    function mostrarCampoNickname() {
+        if (jogouComAmigos.value === "amigos") {       // se escolheu a opc amigos mostra o campo para digitar o nick do amigo 
+            campoNickname.hidden = false;
+            estatisticasAmigo.hidden = false;
+        } else {
+            campoNickname.hidden = true;
+            estatisticasAmigo.hidden = true;
+            nicknameAmigo.value = "";
+            eliminacoesAmigo.value = "";
+            taxaHsAmigo.value = "";
+            mortesAmigo.value = "";
+            danoAmigo.value = "";
+        }
+    }
+
+    videoAceitar.addEventListener("ended", function () {           // espera o video terminar com escutar o evendo ended de acabr video, ai puxa a função como vazia q representa apenas o camada de video da página desaparecendo 
+        videoOverlay.hidden = true;
     });
 
     function mostrarImagemMapa() {
@@ -76,19 +181,22 @@
             "../assets/mapas/image_processing20251118-1-uu0e4l.webp",      /*ancient */
             "../assets/mapas/news-cs2-cobblestone-2026-1279.ed27c5cccf13dcd1.webp"  /*cobblestone */
         ];
+
         let encontrouImagem = false;
 
         for (let i = 0; i < valoresMapas.length; i++) {
             if (mapa.value === valoresMapas[i]) {
                 imagemMapa.src = caminhosImagens[i];
                 imagemMapa.alt = "Imagem do mapa " + valoresMapas[i];
-                imagemMapa.hidden = false;
-                encontrouImagem = true;
+                imagemMapa.hidden = false;   // não exibido ate percorrer a imagem e detectar seleção
+                encontrouImagem = true;        
             }
         }
 
-        if (encontrouImagem === false) {
-            imagemMapa.hidden = true;     /* PRECISA DEIXAR DECLARADO COMO TRUE SENÃO ELE CONTINUA APARECENDO, ERRO RESOLVIDO */
+        if (!encontrouImagem) {
+            imagemMapa.hidden = true;     // se não encontrar a imagem, esconder com o hidden sendo true 
+
+            // aprendizado: o sinal de igual 3 vezes representa a comparação de valor e se a saida é boleana como true or false, senão se o exemplo utilizasse apenas dois iguais ele apenas diria > esse valor agr é tal , ou comparação absoluta 
         }
     }
 </script>

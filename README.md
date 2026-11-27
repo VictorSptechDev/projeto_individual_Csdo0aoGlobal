@@ -38,6 +38,12 @@ _O comando acima irá iniciar seu projeto e efetuar os comandos de acordo com a 
 
 7. Caso queira parar a execução, tecle **CTRL+C** no terminal em que o projeto está rodando.
 
+## Cadastro e gráficos das partidas CS2
+
+Antes de cadastrar partidas, execute o script **src/database/migrations/001_create_partida_cs2.sql** no banco configurado em `DB_DATABASE`. A tabela `usuario` precisa existir primeiro.
+
+O formulário de desempenho salva cada partida para o usuário conectado. Ao terminar o vídeo, a página de análise carrega o histórico e os gráficos de eliminações, HS, mortes e dano.
+
 ## Adicionar novo recurso ao projeto
 
 **"Recurso? O que é?"** Enquanto no Banco de Dados chamamos as tabelas de "entidades", quando tratamos de desenvolvimento WEB usamos a palavra "recurso" para se referir a algo que podemos criar, ler, atualizar ou deletar [1]. Estas ações são conhecidas como CRUD: Create, Read, Update e Delete. Para acessar cada ação, usamos os métodos HTTP: POST, GET, PUT e DELETE [2]. (Há outros verbos, porém com estes já conseguimos efetuar CRUDs). 

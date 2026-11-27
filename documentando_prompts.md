@@ -90,6 +90,11 @@ usei o antigravity com o gemini 3.8
 **troque a cor do prata para cinza e global para dourado, preciso que seja em layers diferentes mas fazendo parte do mesmo texto**
 
 
-
 **me explique e coloque essa pequena imagem: https://tse4.mm.bing.net/th/id/OIP.QazZmqt2AYJ49asUTM4PPAHaEK?r=0\&rs=1\&pid=ImgDetMain\&o=7\&rm=3 , do lado do prata ao global como uma imagem pequena**
+
+
+
+**eu preciso que quando a opção do select seja clicada aparece em baixo do select a imagem do mapa que eu quero como faz me explica**
+
+**vamos por partes que estou aprendendo, está certo o jeito que fiz hidden e img e id**
 
