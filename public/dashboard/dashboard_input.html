@@ -100,46 +100,137 @@
     /*APRENDIZADO:
     USANDO A FUNÇÃO video overlay para o video "saltar na tela (dica do leo), e escurecer o fundo, api nativa de videos do javascript " */
 
-    function aceitar() {
-    let dadosValidos = true;
+    let enviandoPartida = false;
+    let partidaSalva = false;
+    let videoFinalizado = false;
+    let videoFalhou = false;
+    let redirecionamentoIniciado = false;
 
-    if (jogouComAmigos.value === "amigos") {
-        let nickname = nicknameAmigo.value.trim(); // trim remove os espaços entre o texto apenas para pegar o value bruto, sem espaços no inicio e no final
-
-        if (nickname[0] !== "@" || nickname.indexOf("@", 1) !== -1 || nickname.length === 1) {
-            alert("Nickname inválido. Use exatamente um @ no início, por exemplo: @jogador.");
-            dadosValidos = false;
+    function redirecionarDashboardQuandoPronto() {
+        if (partidaSalva && videoFinalizado && !redirecionamentoIniciado) {
+            redirecionamentoIniciado = true;
+            if (videoFalhou) {
+                alert("A partida foi salva, mas o vídeo não pôde ser reproduzido.");
+            }
+            window.location.href = "dashboard.html";
         }
     }
 
-    if (!taxaHsUsuario.checkValidity()) {
-        alert("Sua taxa de HS deve ser um número inteiro entre 0 e 100.");
-        dadosValidos = false;
+    function aceitar() {
+        if (enviandoPartida) {
+            return;
+        }
+
+        if (!sessionStorage.ID_USUARIO) {
+            alert("Faça login para salvar os dados da partida.");
+            window.location.href = "../login.html";
+            return;
+        }
+
+        let comAmigos = jogouComAmigos.value === "amigos";
+        let nickname = nicknameAmigo.value.trim();
+        let dadosValidos = Boolean(mapa.value && jogouComAmigos.value);
+        let camposInvalidos = [];
+
+        if (!mapa.value) {
+            camposInvalidos.push("mapa");
+        }
+
+        if (!jogouComAmigos.value) {
+            camposInvalidos.push("modo da partida");
+        }
+
+        function validarNumeroInteiro(campo, nome) {
+            let valido = campo.value !== ""
+                && campo.checkValidity()
+                && Number.isInteger(campo.valueAsNumber);
+
+            if (!valido) {
+                camposInvalidos.push(nome);
+                dadosValidos = false;
+            }
+        }
+
+        validarNumeroInteiro(eliminacoesUsuario, "suas eliminações");
+        validarNumeroInteiro(taxaHsUsuario, "sua taxa de HS");
+        validarNumeroInteiro(mortesUsuario, "suas mortes");
+        validarNumeroInteiro(danoUsuario, "seu dano");
+
+        if (comAmigos) {
+            if (nickname[0] !== "@" || nickname.indexOf("@", 1) !== -1 || nickname.length === 1) {
+                dadosValidos = false;
+                camposInvalidos.push("nickname do amigo (comece com um único @)");
+            }
+
+            validarNumeroInteiro(eliminacoesAmigo, "eliminações do amigo");
+            validarNumeroInteiro(taxaHsAmigo, "taxa de HS do amigo");
+            validarNumeroInteiro(mortesAmigo, "mortes do amigo");
+            validarNumeroInteiro(danoAmigo, "dano do amigo");
+        }
+
+        if (!dadosValidos) {
+            alert(
+                "Confira estes campos: " + camposInvalidos.join(", ")
+                + ". Use números inteiros não negativos; a taxa de HS deve ficar entre 0 e 100."
+            );
+        } else {
+            let partida = {
+                idUsuario: Number(sessionStorage.ID_USUARIO),
+                mapa: mapa.value,
+                jogouComAmigos: comAmigos ? "amigos" : "solo",
+                nicknameAmigo: comAmigos ? nickname : null,
+                eliminacoesUsuario: Number(eliminacoesUsuario.value),
+                taxaHsUsuario: Number(taxaHsUsuario.value),
+                mortesUsuario: Number(mortesUsuario.value),
+                danoUsuario: Number(danoUsuario.value),
+                eliminacoesAmigo: comAmigos ? Number(eliminacoesAmigo.value) : null,
+                taxaHsAmigo: comAmigos ? Number(taxaHsAmigo.value) : null,
+                mortesAmigo: comAmigos ? Number(mortesAmigo.value) : null,
+                danoAmigo: comAmigos ? Number(danoAmigo.value) : null
+            };
+
+            enviandoPartida = true;
+            partidaSalva = false;
+            videoFinalizado = false;
+            videoFalhou = false;
+            redirecionamentoIniciado = false;
+
+            videoOverlay.hidden = false;
+            videoAceitar.currentTime = 0;
+            videoAceitar.play().catch(function () {
+                videoFalhou = true;
+                videoFinalizado = true;
+                videoOverlay.hidden = true;
+                redirecionarDashboardQuandoPronto();
+            });
+
+            fetch("/partidas/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(partida)
+            })
+                .then(function (resposta) {
+                    return resposta.json().then(function (dados) {
+                        if (!resposta.ok) {
+                            throw new Error(dados.message || "Não foi possível salvar a partida.");
+                        }
+                        return dados;
+                    });
+                })
+                .then(function () {
+                    partidaSalva = true;
+                    redirecionarDashboardQuandoPronto();
+                })
+                .catch(function (erro) {
+                    videoAceitar.pause();
+                    videoOverlay.hidden = true;
+                    enviandoPartida = false;
+                    alert("Não foi possível salvar os dados: " + erro.message);
+                });
+        }
     }
-
-    if (jogouComAmigos.value === "amigos" && !taxaHsAmigo.checkValidity()) {
-        alert("A taxa de HS do amigo deve ser um número inteiro entre 0 e 100.");
-        dadosValidos = false;
-    }
-
-    if (dadosValidos) {
-    videoOverlay.hidden = false;
-
-            // aprendizado: video overlay = div que contem o video, hidden = true = escondido, false = visivel
-            // video aparece quando clica o btn
-            // vale lembrar q o valor de hidden funciona ao contrario
-
-    videoAceitar.currentTime = 0;    // mostrar posição atual do video quando ele vai começar
-
-    videoAceitar.play().catch(function () {
-        videoOverlay.hidden = true;
-        alert("Não foi possível reproduzir o vídeo.");
-
-        // aprendizado: catch = captura de erro, caso o video não consiga ser reproduzido, ele vai esconder o video e mostrar um alert dizendo que não foi possivel reproduzir o video
-        
-    });
-    }
-}
 
     function mostrarCampoNickname() {
         if (jogouComAmigos.value === "amigos") {       // se escolheu a opc amigos mostra o campo para digitar o nick do amigo 
@@ -158,6 +249,8 @@
 
     videoAceitar.addEventListener("ended", function () {           // espera o video terminar com escutar o evendo ended de acabr video, ai puxa a função como vazia q representa apenas o camada de video da página desaparecendo 
         videoOverlay.hidden = true;
+        videoFinalizado = true;
+        redirecionarDashboardQuandoPronto();
     });
 
     function mostrarImagemMapa() {

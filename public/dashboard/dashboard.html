@@ -53,18 +53,34 @@
         .resumo-partidas[hidden],
         .graficos-partidas[hidden],
         .historico-partidas[hidden],
-        .dashboard-vazio[hidden] {
+        .dashboard-vazio[hidden],
+        .mapa-destaque[hidden] {
             display: none;
         }
 
         .resumo-item,
         .grafico-card,
         .historico-partidas,
-        .dashboard-vazio {
+        .dashboard-vazio,
+        .mapa-destaque {
             padding: 20px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             background: #151a21;
+        }
+
+        .mapa-destaque {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .mapa-destaque img {
+            width: min(100%, 420px);
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            object-fit: cover;
         }
 
         .resumo-item span {
@@ -117,9 +133,102 @@
             color: #00d285;
         }
 
+        .ajuda-quiz {
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            background: #151a21;
+        }
+
+        #performanceContent {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .ajuda-quiz h2,
+        .ajuda-quiz h3 {
+            margin-top: 0;
+        }
+
+        .quiz-opcoes {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 0;
+            border: 0;
+        }
+
+        .quiz-opcao {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: #0e1217;
+            cursor: pointer;
+        }
+
+        .quiz-opcao input {
+            margin-top: 4px;
+            accent-color: #ed145b;
+        }
+
+        .quiz-opcoes legend {
+            margin-bottom: 10px;
+            color: #aab4c3;
+        }
+
+        .quiz-acao {
+            padding: 10px 16px;
+            border: 0;
+            border-radius: 6px;
+            background: #ed145b;
+            color: #fff;
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .quiz-acao:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+
+        .quiz-feedback {
+            min-height: 1.5em;
+            color: #aab4c3;
+        }
+
+        .quiz-pontuacao {
+            color: #00d285;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .ajuda-quiz[hidden],
+        #performanceContent[hidden],
+        #quizInicio[hidden],
+        #quizPergunta[hidden],
+        #quizResultado[hidden] {
+            display: none;
+        }
+
+        .btn-nav a {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+        }
+
         @media (max-width: 700px) {
             .dash {
                 padding: 24px 16px;
+            }
+
+            .mapa-destaque {
+                align-items: flex-start;
+                flex-direction: column;
             }
         }
     </style>
@@ -133,8 +242,16 @@
                 <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
             </div>
 
-            <div class="btn-nav">
-                <h3>Performance</h3>
+            <div class="btn-nav" id="navPerformance">
+                <a href="#performanceContent" onclick="mostrarAbaDashboard('performance'); return false;" aria-current="page">
+                    <h3>Performance</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav-white" id="navAjuda">
+                <a href="#ajudaQuiz" onclick="mostrarAbaDashboard('ajuda'); return false;">
+                    <h3>Ajuda / Quiz</h3>
+                </a>
             </div>
 
             <div class="btn-nav-white">
@@ -159,6 +276,7 @@
         </aside>
 
         <main class="dash">
+            <div id="performanceContent">
             <header class="dashboard-topo">
                 <div>
                     <h2>Desempenho das Partidas</h2>
@@ -168,6 +286,14 @@
             </header>
 
             <p id="dashboardStatus" class="dashboard-status" role="status">Carregando suas partidas...</p>
+
+            <section id="mapaDestaque" class="mapa-destaque" hidden>
+                <div>
+                    <h3>Mapa da última partida</h3>
+                    <p id="nomeMapaSelecionado"></p>
+                </div>
+                <img id="imagemMapaSelecionado" alt="">
+            </section>
 
             <section id="resumoPartidas" class="resumo-partidas" hidden>
                 <div class="resumo-item">
@@ -233,11 +359,75 @@
                 <h3>Ainda não há partidas cadastradas</h3>
                 <p>Cadastre uma partida para que seus gráficos e histórico apareçam aqui.</p>
             </section>
+            </div>
+
+            <section id="ajudaQuiz" class="ajuda-quiz" hidden>
+                <header class="dashboard-topo">
+                    <div>
+                        <h2>Ajuda: fundamentos do CS2</h2>
+                        <p>Responda ao quiz para revisar conceitos de movimentação, mira e posicionamento.</p>
+                    </div>
+                    <button class="quiz-acao" type="button" onclick="mostrarAbaDashboard('performance')">
+                        Voltar à performance
+                    </button>
+                </header>
+
+                <div id="quizInicio">
+                    <p>O quiz tem 10 perguntas. Na pergunta 8, selecione todas as alternativas corretas.</p>
+                    <button class="quiz-acao" type="button" onclick="iniciarQuizFundamentos()">
+                        Iniciar quiz
+                    </button>
+                </div>
+
+                <div id="quizPergunta" hidden>
+                    <p id="quizProgresso" class="dashboard-status"></p>
+                    <h3 id="quizEnunciado"></h3>
+                    <fieldset class="quiz-opcoes">
+                        <legend>Escolha uma ou mais respostas:</legend>
+                        <div id="quizAlternativas"></div>
+                    </fieldset>
+                    <p id="quizFeedback" class="quiz-feedback" role="status" aria-live="polite"></p>
+                    <button id="quizVerificar" class="quiz-acao" type="button" onclick="verificarRespostaQuiz()">
+                        Conferir resposta
+                    </button>
+                    <button id="quizProxima" class="quiz-acao" type="button" onclick="avancarQuiz()" hidden>
+                        Próxima pergunta
+                    </button>
+                </div>
+
+                <div id="quizResultado" hidden>
+                    <h3>Resultado do quiz</h3>
+                    <p id="quizPontuacao" class="quiz-pontuacao"></p>
+                    <p id="quizMensagemFinal"></p>
+                    <button class="quiz-acao" type="button" onclick="iniciarQuizFundamentos()">
+                        Tentar novamente
+                    </button>
+                </div>
+            </section>
         </main>
     </div>
 
     <script src="../js/sessao.js"></script>
+    <script src="../js/quiz.js"></script>
     <script>
+        function mostrarAbaDashboard(aba) {
+            var mostrarPerformance = aba === "performance";
+            document.getElementById("performanceContent").hidden = !mostrarPerformance;
+            document.getElementById("ajudaQuiz").hidden = mostrarPerformance;
+            document.getElementById("navPerformance").className =
+                mostrarPerformance ? "btn-nav" : "btn-nav-white";
+            document.getElementById("navAjuda").className =
+                mostrarPerformance ? "btn-nav-white" : "btn-nav";
+
+            if (mostrarPerformance) {
+                document.getElementById("navPerformance").querySelector("a").setAttribute("aria-current", "page");
+                document.getElementById("navAjuda").querySelector("a").removeAttribute("aria-current");
+            } else {
+                document.getElementById("navAjuda").querySelector("a").setAttribute("aria-current", "page");
+                document.getElementById("navPerformance").querySelector("a").removeAttribute("aria-current");
+            }
+        }
+
         function nomeMapa(mapa) {
             var nomes = {
                 mirage: "Mirage",
@@ -251,6 +441,21 @@
             };
 
             return nomes[mapa] || mapa;
+        }
+
+        function caminhoImagemMapa(mapa) {
+            var caminhos = {
+                mirage: "../assets/mapas/de_mirage.webp",
+                dust: "../assets/mapas/csgo-dust-2-map.avif",
+                nuke: "../assets/mapas/1296339-vertical-nuke-hd-wallpaper-1920x1080-for-ipad.jpg",
+                inferno: "../assets/mapas/cs-2-inferno.jpeg",
+                anubis: "../assets/mapas/1067px-CS2_de_anubis.png",
+                cache: "../assets/mapas/mbwk627.jpeg",
+                ancient: "../assets/mapas/image_processing20251118-1-uu0e4l.webp",
+                cobblestone: "../assets/mapas/news-cs2-cobblestone-2026-1279.ed27c5cccf13dcd1.webp"
+            };
+
+            return caminhos[mapa];
         }
 
         function formatarData(dataPartida) {
@@ -383,6 +588,17 @@
             document.getElementById("resumoPartidas").hidden = false;
             document.getElementById("graficosPartidas").hidden = false;
             document.getElementById("historicoPartidas").hidden = false;
+            var ultimaPartida = partidas[partidas.length - 1];
+            var imagemMapa = caminhoImagemMapa(ultimaPartida.mapa);
+
+            if (imagemMapa) {
+                document.getElementById("nomeMapaSelecionado").textContent = nomeMapa(ultimaPartida.mapa);
+                document.getElementById("imagemMapaSelecionado").src = imagemMapa;
+                document.getElementById("imagemMapaSelecionado").alt =
+                    "Imagem do mapa " + nomeMapa(ultimaPartida.mapa);
+                document.getElementById("mapaDestaque").hidden = false;
+            }
+
             document.getElementById("totalPartidas").textContent = partidas.length;
             document.getElementById("mediaEliminacoes").textContent =
                 calcularMedia(partidas, "eliminacoesUsuario").toFixed(1);
